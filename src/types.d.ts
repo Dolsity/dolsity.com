@@ -6,6 +6,18 @@ interface iDrawerItem {
   external?: boolean
 }
 
+interface iFooterItem {
+  id: string
+  title: string
+  links: { id: string; title: string; url: string }[]
+}
+
+interface iFooterIcon {
+  id: string
+  icon: JSX.Element
+  url: string
+}
+
 interface iSkillCard {
   category: string
   technologies: string[]
