@@ -5,3 +5,8 @@ interface iDrawerItem {
   url: string
   external?: boolean
 }
+
+interface iSkillCard {
+  category: string
+  technologies: string[]
+}
