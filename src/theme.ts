@@ -21,8 +21,21 @@ const theme = createTheme({
     divider: '#B3B3B3',
     mode: 'dark',
   },
+  /*
+  - xs (0-599px)
+  - sm (600-959px)
+  - md and up (960px+)
+  - lg and up (1280px+)
+*/
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    /*
+      Better responsive pattern:
+      - Provide a base (xs)
+      - Override in ascending order (sm -> md -> lg -> xl)
+      - Avoid putting larger breakpoint first which can be overridden later unintentionally
+      Optionally, you could replace the discrete steps with a fluid clamp() value.
+    */
     h1: {
       fontWeight: 600,
       lineHeight: 1.2,
@@ -105,6 +118,11 @@ const theme = createTheme({
   components: {
     MuiCssBaseline: {
       styleOverrides: {
+        /*
+        '*': {
+          outline: '#ce0000ed 0.75px solid !important',
+        },
+        */
         body: {
           margin: 0,
           padding: 0,
