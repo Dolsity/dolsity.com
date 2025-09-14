@@ -153,7 +153,7 @@ export default function Footer() {
             Dolsity © {currentYear}
           </Typography>
           <Link
-            href="https://github.com/dolsity/dolsity.github.io"
+            href="https://github.com/dolsity/dolsity.com"
             target="_blank"
             rel="nofollow noopener"
             variant="body2"
