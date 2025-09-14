@@ -5,6 +5,7 @@ import { CssBaseline, ThemeProvider, Box } from '@mui/material'
 
 import Navigator from './components/Navigation/Navigator'
 import Home from './pages/Home'
+import NotFound from './pages/NotFound'
 
 import theme from './theme'
 
@@ -30,6 +31,7 @@ export default function App() {
       <Box>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Box>
     </ThemeProvider>
