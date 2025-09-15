@@ -3,39 +3,19 @@ import { createTheme } from '@mui/material'
 const baseTheme = createTheme()
 
 const theme = createTheme({
-  ...baseTheme,
   palette: {
-    success: { main: '#1DB954', contrastText: '#FFFFFF' },
-    error: { main: '#E22134', contrastText: '#FFFFFF' },
-    warning: { main: '#FF5745', contrastText: '#FFFFFF' },
-    primary: { main: '#212121', contrastText: '#FFFFFF' },
-    background: { default: '#212121', paper: '#121212' },
-    text: { primary: '#ffffff', secondary: '#DDDDDD', disabled: '#888888' },
-    action: {
-      active: '#FFFFFF',
-      hover: '#535353',
-      selected: '#1DB954',
-      disabled: '#DDDDDD',
-      disabledBackground: '#333333',
-    },
-    divider: '#B3B3B3',
+    success: { main: '#27c93f' },
+    error: { main: '#ff5f56' },
+    warning: { main: '#ffbd2e' },
     mode: 'dark',
+    primary: { main: '#948979' },
+    secondary: { main: '#DFD0B8' },
+    background: { default: '#222831', paper: '#393E46' },
+    text: { primary: '#FFFFFF', secondary: '#ffffffb3', disabled: '#ffffff80' },
+    divider: '#ffffff',
   },
-  /*
-  - xs (0-599px)
-  - sm (600-959px)
-  - md and up (960px+)
-  - lg and up (1280px+)
-*/
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    /*
-      Better responsive pattern:
-      - Provide a base (xs)
-      - Override in ascending order (sm -> md -> lg -> xl)
-      - Avoid putting larger breakpoint first which can be overridden later unintentionally
-      Optionally, you could replace the discrete steps with a fluid clamp() value.
-    */
     h1: {
       fontWeight: 600,
       lineHeight: 1.2,
