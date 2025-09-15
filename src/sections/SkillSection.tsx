@@ -44,7 +44,15 @@ export default function SkillsSection() {
     },
   ]
   return (
-    <Box id="skills" sx={{ bgcolor: 'background.default', py: 8 }}>
+    <Box
+      id="skills"
+      sx={{
+        bgcolor: 'background.default',
+        py: 8,
+        borderBottom: 1,
+        borderColor: 'divider',
+      }}
+    >
       <Container maxWidth="md">
         <Box sx={{ mb: 2, textAlign: { xs: 'center', sm: 'left' } }}>
           {/* SKILLS TITLES */}
@@ -54,7 +62,7 @@ export default function SkillsSection() {
               fontWeight: 700,
               mb: 1.5,
               color: 'text.primary',
-              letterSpacing: '0.1rem',
+              letterSpacing: 0.5,
             }}
           >
             My Skills

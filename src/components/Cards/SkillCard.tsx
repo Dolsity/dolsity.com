@@ -16,7 +16,7 @@ const SkillCard = ({
         gridTemplateColumns: 'repeat(auto-fit, minmax(14em, 1fr))',
         justifyContent: 'space-between',
         alignItems: 'stretch',
-        gap: '0.5rem',
+        gap: 0.5,
         my: 1,
         textAlign: { xs: 'center', sm: 'left' },
       }}
@@ -34,6 +34,8 @@ const SkillCard = ({
               sx={{
                 fontWeight: 600,
                 mb: { xs: 0.5, sm: 1 },
+                color: 'text.primary',
+                letterSpacing: 0.5,
               }}
             >
               {skillCategory.category}
