@@ -17,8 +17,9 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
         textAlign: 'center',
         m: 1.5,
         borderRadius: '3px',
-        border: '1px solid #6e6759',
-        backgroundColor: 'background.paper',
+        border: 1,
+        borderColor: 'primary.main',
+        bgcolor: 'background.paper',
       }}
     >
       {/* CARD IMAGE */}
@@ -49,13 +50,13 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
             }}
           />
         ) : (
-          <Box sx={{ width: '100%', height: '100%', background: 'background.default' }} />
+          <Box sx={{ width: '100%', height: '100%', background: 'background.paper' }} />
         )}
       </Box>
 
       {/* CARD TITLE */}
-      <Box sx={{ backgroundColor: 'background.default', p: 1 }}>
-        <Typography variant="h6" sx={{ letterSpacing: '0.08rem' }}>
+      <Box sx={{ bgcolor: 'background.default', p: 1 }}>
+        <Typography variant="h6" sx={{ letterSpacing: 1 }}>
           {card.title}
         </Typography>
       </Box>
@@ -99,13 +100,14 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
                 mr: 0.5,
                 mb: 0.5,
                 backgroundColor: 'transparent',
-                border: '1px solid #766e5fcc',
-                color: 'text.secondary',
+                border: 1,
+                borderColor: 'primary.main',
+                color: 'text.primary',
                 transition: 'all 0.3s ease',
                 '&:hover': {
-                  backgroundColor: 'primary.main',
-                  color: 'primary.contrastText',
-                  border: '1px solid #766e5f',
+                  color: 'text.secondary',
+                  border: 1,
+                  borderColor: 'background.default',
                 },
               }}
             />

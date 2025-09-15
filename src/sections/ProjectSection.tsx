@@ -47,7 +47,7 @@ export default function ProjectsSection() {
     },
   ]
   return (
-    <Box id="projects" sx={{ bgcolor: 'background.paper', py: 6 }}>
+    <Box id="projects" sx={{ bgcolor: 'background.default', py: 6 }}>
       <Container maxWidth="md">
         {/* PROJECT TITLES */}
         <Box sx={{ mb: 2, textAlign: { xs: 'center', sm: 'left' } }}>
@@ -57,7 +57,7 @@ export default function ProjectsSection() {
               fontWeight: 700,
               mb: 1.5,
               color: 'text.primary',
-              letterSpacing: '0.1rem',
+              letterSpacing: 0.5,
             }}
           >
             My Work
@@ -98,7 +98,8 @@ export default function ProjectsSection() {
               />
             ))}
           </Grid>
-          {/* Image preview dialog */}
+
+          {/* IMAGE DIALOG */}
           <Dialog
             open={Boolean(preview)}
             onClose={() => setPreview(null)}
@@ -116,27 +117,34 @@ export default function ProjectsSection() {
                   display: 'block',
                   objectFit: 'contain',
                   cursor: 'zoom-out',
-                  border: '1px solid #6e6759',
+                  border: 1,
+                  borderColor: 'primary.main',
                 }}
                 onClick={() => setPreview(null)}
               />
             </DialogContent>
           </Dialog>
 
-          {/* Full description dialog */}
+          {/* DESCRIPTION DIALOG */}
           <Dialog open={Boolean(detail)} onClose={() => setDetail(null)} maxWidth="sm" fullWidth>
             <DialogTitle
-              sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
+              sx={{
+                bgcolor: 'background.default',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                p: 1.5,
+              }}
             >
-              <Typography variant="h6" sx={{ mr: 2 }}>
+              <Typography variant="h6" sx={{ mx: 1.5 }}>
                 {detail?.title}
               </Typography>
               <IconButton aria-label="close" onClick={() => setDetail(null)} size="small">
                 <Close />
               </IconButton>
             </DialogTitle>
-            <DialogContent>
-              <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
+            <DialogContent sx={{ bgcolor: 'background.paper', p: 0 }}>
+              <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', px: 3, py: 2 }}>
                 {detail?.description}
               </Typography>
             </DialogContent>
