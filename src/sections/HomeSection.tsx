@@ -26,8 +26,13 @@ export default function HomeSection() {
   const typedHighlight = useMemo(() => (typedText ? highlightPython(typedText) : []), [typedText])
 
   return (
-    <Box id="home" sx={{ background: 'linear-gradient(#7d7a69, #e9d7c4)' }}>
-      {/* LANDING 1/3 */}
+    <Box
+      id="home"
+      sx={(theme) => ({
+        backgroundColor: theme.palette.background.default,
+        backgroundImage: `linear-gradient(${theme.palette.background.paper}, ${theme.palette.background.default})`,
+      })}
+    >
       <Container maxWidth="md">
         {/* LANDING TITLES */}
         <Box sx={{ textAlign: 'center', py: 7 }}>
