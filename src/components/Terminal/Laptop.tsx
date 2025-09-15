@@ -8,7 +8,7 @@ export function LaptopFrame({ children }: PropsWithChildren) {
       <Box
         sx={{
           position: 'relative',
-          bgcolor: '#2f2f2fc9',
+          bgcolor: '#272727db',
           borderRadius: '1rem 1rem 0 0',
           p: { xs: '35px 18px 0 18px', md: '35px 23px 0 23px' },
         }}
@@ -35,7 +35,7 @@ export function LaptopFrame({ children }: PropsWithChildren) {
               alignItems: 'center',
               height: '30px',
               borderRadius: '8px 8px 0 0',
-              backgroundColor: '#434343',
+              backgroundColor: '#343434ff',
               borderBottom: 1,
               borderColor: 'primary.main',
               px: 1,

@@ -30,7 +30,7 @@ export default function HomeSection() {
       id="home"
       sx={(theme) => ({
         backgroundColor: theme.palette.background.default,
-        backgroundImage: `linear-gradient(${theme.palette.background.paper}, ${theme.palette.background.default})`,
+        backgroundImage: `linear-gradient(185deg, ${theme.palette.background.default} 0%, ${theme.palette.background.default} 75%, ${theme.palette.background.paper} 100%)`,
       })}
     >
       <Container maxWidth="md">
