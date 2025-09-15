@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   AppBar,
   IconButton,
@@ -22,10 +22,10 @@ import CloseIcon from '@mui/icons-material/Close'
 
 const Navigator = () => {
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const [active, setActive] = useState<string>('nav-home')
+  const navigate = useNavigate()
 
   const isHome = location.pathname === '/'
 
@@ -46,25 +46,11 @@ const Navigator = () => {
     if (!isMobile) setOpen(false)
   }, [isMobile])
 
-  useEffect(() => {
-    if (!isHome) {
-      setActive(location.pathname.startsWith('/contact') ? 'nav-contact' : 'nav-home')
-      return
-    }
-    if (location.hash) {
-      const match = items.find((n) => n.url === location.hash)
-      if (match) setActive(match.id)
-    } else {
-      setActive('nav-home')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, isHome])
-
   const scrollToHash = useCallback((hash: string) => {
     const el = document.querySelector(hash)
     if (el) {
       el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      history.replaceState(null, '', hash)
+      window.history.replaceState(null, '', hash)
     }
   }, [])
 
@@ -73,16 +59,16 @@ const Navigator = () => {
       if (item.url.startsWith('#')) {
         scrollToHash(item.url)
       } else {
-        window.location.href = item.url
+        navigate(item.url)
       }
-      setActive(item.id)
       setOpen(false)
     },
-    [scrollToHash]
+    [scrollToHash, navigate]
   )
 
   return (
     <>
+      {/* NAVIGATION BAR */}
       <AppBar
         component="nav"
         sx={{
@@ -95,6 +81,7 @@ const Navigator = () => {
       >
         <Toolbar disableGutters sx={{ justifyContent: 'center' }}>
           <Container
+            maxWidth="lg"
             sx={{
               display: 'flex',
               alignItems: 'center',
@@ -102,16 +89,15 @@ const Navigator = () => {
               px: { xs: 2, sm: 3, md: 4 },
             }}
           >
+            {/* LOGO / BRAND NAME */}
             <Typography
               variant="h5"
               sx={{
-                fontSize: { xs: 18, sm: 20, md: 22 },
                 display: 'flex',
                 alignItems: 'center',
                 gap: 0.8,
                 lineHeight: 1,
                 userSelect: 'none',
-                fontWeight: 300,
                 letterSpacing: 0.5,
                 ':hover': { cursor: 'pointer' },
               }}
@@ -136,8 +122,9 @@ const Navigator = () => {
                 &gt;
               </Box>
             </Typography>
-
+            {/* DESKTOP NAVIGATION ITEMS */}
             <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
+              {/* MOBILE ICON & DESKTOP NAVIGATION BUTTONS */}
               {isMobile ? (
                 <Tooltip title={open ? 'Close Menu' : 'Open Menu'} placement="left">
                   <IconButton
@@ -152,38 +139,38 @@ const Navigator = () => {
                   </IconButton>
                 </Tooltip>
               ) : (
-                <Box
-                  component="nav"
-                  aria-label="Primary"
-                  sx={{ display: 'flex', gap: { xs: 0.5, md: 1 } }}
-                >
-                  {items.map((item) => (
-                    <Button
-                      key={item.id}
-                      color={active === item.id ? 'inherit' : 'primary'}
-                      onClick={() => handleNavigate(item)}
-                      sx={{
-                        cursor: 'pointer',
-                        background: 'none',
-                        border: 'none',
-                        color: theme.palette.text.primary,
-                        px: 1.25,
-                        py: 0.75,
-                        borderRadius: 1,
-                        textTransform: 'none',
-                      }}
-                      aria-current={active === item.id ? 'page' : undefined}
-                    >
-                      {item.title}
-                    </Button>
-                  ))}
+                <Box component="nav" aria-label="Primary" sx={{ display: 'flex', gap: 1 }}>
+                  {items.map((item) => {
+                    const isActive = isHome
+                      ? location.hash === item.url || (!location.hash && item.id === 'nav-home')
+                      : location.pathname === item.url
+                    return (
+                      <Button
+                        key={item.id}
+                        onClick={() => handleNavigate(item)}
+                        sx={{
+                          cursor: 'pointer',
+                          background: 'none',
+                          border: 'none',
+                          color: 'text.primary',
+                          px: 1.25,
+                          py: 0.75,
+                          borderRadius: 1,
+                          textTransform: 'none',
+                        }}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        {item.title}
+                      </Button>
+                    )
+                  })}
                 </Box>
               )}
             </Box>
           </Container>
         </Toolbar>
       </AppBar>
-
+      {/* MOBILE NAVIGATION MENU */}
       {isMobile && (
         <SwipeableDrawer
           open={open}
@@ -199,8 +186,8 @@ const Navigator = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    px: 3,
-                    py: 1,
+                    px: 2,
+                    py: 0.5,
                   }}
                 >
                   <IconButton
@@ -209,6 +196,7 @@ const Navigator = () => {
                     edge="end"
                     color="inherit"
                     aria-label="close menu"
+                    aria-expanded={open}
                     sx={{ ml: 'auto' }}
                   >
                     <Tooltip title="Close Menu" placement="left">
@@ -219,11 +207,22 @@ const Navigator = () => {
               }
             >
               <Divider />
-              {items.map((item) => (
-                <ListItemButton key={item.id} onClick={() => handleNavigate(item)} sx={{ px: 2 }}>
-                  <ListItemText primary={item.title} />
-                </ListItemButton>
-              ))}
+              {/* MOBILE MENU ITEMS */}
+              {items.map((item) => {
+                const isActive = isHome
+                  ? location.hash === item.url || (!location.hash && item.id === 'nav-home')
+                  : location.pathname === item.url
+                return (
+                  <ListItemButton
+                    key={item.id}
+                    onClick={() => handleNavigate(item)}
+                    sx={{ px: 2 }}
+                    aria-current={isActive ? 'page' : undefined}
+                  >
+                    <ListItemText primary={item.title} />
+                  </ListItemButton>
+                )
+              })}
             </List>
           </Box>
         </SwipeableDrawer>

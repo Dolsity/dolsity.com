@@ -22,22 +22,22 @@ export function CodeEditor({ fullLines, typedLines, cursor, extraBlankLines = 2 
   return (
     <Box
       sx={{
-        backgroundColor: '#2f2f2f',
+        bgcolor: 'background.paper',
         display: 'grid',
         gridTemplateColumns: '2rem auto',
-        userSelect: 'none',
         fontFamily: 'Fira Code, monospace',
         fontWeight: 400,
         fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.85rem' },
+        userSelect: 'none',
       }}
     >
-      {/* Gutter */}
       <Box
         sx={{
           textAlign: 'right',
-          color: '#ffffffb3',
+          color: 'text.secondary',
           p: '0.4rem 0.6rem',
-          borderRight: '1px solid #3b3b3b',
+          borderRight: 1,
+          borderColor: 'primary.main',
         }}
       >
         {displayLines.map((l) => (
@@ -46,7 +46,6 @@ export function CodeEditor({ fullLines, typedLines, cursor, extraBlankLines = 2 
           </div>
         ))}
       </Box>
-      {/* Content */}
       <Box
         sx={{
           p: '0.4rem 0.6rem',

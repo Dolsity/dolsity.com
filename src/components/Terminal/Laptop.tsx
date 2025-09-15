@@ -4,15 +4,16 @@ import type { PropsWithChildren } from 'react'
 export function LaptopFrame({ children }: PropsWithChildren) {
   return (
     <Box>
+      {/* LAPTOP BODY */}
       <Box
         sx={{
           position: 'relative',
-          backgroundColor: '#2f2f2fc9',
+          bgcolor: '#2f2f2fc9',
           borderRadius: '1rem 1rem 0 0',
           p: { xs: '35px 18px 0 18px', md: '35px 23px 0 23px' },
         }}
       >
-        {/* Webcam */}
+        {/* LAPTOP CAMERA */}
         <Box
           sx={{
             position: 'absolute',
@@ -21,15 +22,13 @@ export function LaptopFrame({ children }: PropsWithChildren) {
             transform: 'translateX(-50%)',
             width: '12px',
             height: '12px',
-            backgroundColor: '#747474c9',
+            bgcolor: '#747474c9',
             border: '1px solid #3d3d3d',
             borderRadius: '50%',
-            zIndex: 5,
           }}
         />
-        {/* Screen */}
-        <Box sx={{ borderRadius: '8px 8px 0 0', p: 0, border: '0.5px solid #202020bf' }}>
-          {/* Editor header */}
+        {/* LAPTOP SCREEN */}
+        <Box sx={{ borderRadius: '8px 8px 0 0', p: 0, border: 0.5, borderColor: 'primary.main' }}>
           <Box
             sx={{
               display: 'flex',
@@ -37,10 +36,10 @@ export function LaptopFrame({ children }: PropsWithChildren) {
               height: '30px',
               borderRadius: '8px 8px 0 0',
               backgroundColor: '#434343',
-              borderBottom: '1px solid #292929',
+              borderBottom: 1,
+              borderColor: 'primary.main',
               px: 1,
               position: 'relative',
-              zIndex: 10,
             }}
           >
             <Box sx={{ display: 'flex', gap: 0.5 }}>
