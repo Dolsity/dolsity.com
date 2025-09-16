@@ -41,7 +41,7 @@ export default function ProjectsSection() {
       title: 'Link in Bio',
       summary: 'A simple link in bio website only using HTML5/CSS3.',
       technologies: ['HTML5', 'CSS3'],
-      demoUrl: 'https://dolsity.com/link-in-bio',
+      demoUrl: 'https://dolsity.github.io/link-in-bio',
       githubUrl: 'https://github.com/dolsity/link-in-bio',
       image: '/img/link-in-bio.png',
     },
