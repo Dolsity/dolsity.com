@@ -31,7 +31,7 @@ function NotFound() {
     <Grid
       container
       sx={{
-        bgcolor: 'background.paper',
+        bgcolor: 'background.default',
         placeItems: 'center',
         textAlign: 'center',
         justifyContent: 'center',

@@ -55,7 +55,7 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
       </Box>
 
       {/* CARD TITLE */}
-      <Box sx={{ bgcolor: 'background.default', p: 1 }}>
+      <Box sx={{ bgcolor: 'secondary.main', p: 1 }}>
         <Typography variant="h6" sx={{ letterSpacing: 1 }}>
           {card.title}
         </Typography>
