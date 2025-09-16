@@ -1,69 +1,40 @@
-# React + TypeScript + Vite
+<section align="center">
+    <h1 align="center">
+        <br>
+            <a href="https://dolsity.com"><img width="25%" src="https://avatars.githubusercontent.com/u/84829249" alt="Dolsity"></a>
+        <br>
+            DOLSITY.COM
+        <br>
+    </h1>
+    <h3>My Personal Website</h3>
+</section>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<section align="center">
+    <a href="https://dolsity.com/">
+        <img alt="Website" src="https://img.shields.io/website?down_message=Offline&label=dolsity.com&up_color=bright-green&up_message=Online&url=https%3A%2F%2Fdolsity.com">
+    </a>
+    <a href="https://github.com/dolsity/dolsity.com/issues">
+        <img alt="Issues" src="https://img.shields.io/github/issues/dolsity/dolsity.com?color=0088ff" />
+    </a>
+    <a href="https://github.com/dolsity/dolsity.com/pulls">
+        <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/dolsity/dolsity.com?color=0088ff" />
+    </a>
+    <br />
+    <a href="#"><img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-007ACC.svg?logo=typescript&logoColor=white"></a>
+    <a href="#"><img alt="Vite" src="https://img.shields.io/badge/Vite-646CFF.svg?logo=vite&logoColor=white"></a>
+    <a href="#"><img alt="React" src="https://img.shields.io/badge/React-149ECA.svg?logo=react&logoColor=white"></a>
+    <a href="#"><img alt="material-ui" src="https://img.shields.io/badge/material--ui-0081CB.svg?logo=mui&logoColor=white"></a>
+    <br />
+    <a href="#"><img alt="GitHub Pages" src="https://img.shields.io/badge/GitHub%20Pages-181717.svg?logo=github&logoColor=white"></a>
+    <a href="/LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+</section>
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This repository contains the source code for my personal website, [dolsity.com](https://dolsity.com). It serves as a platform to showcase my projects, skills and experiences.
 
-## Expanding the ESLint configuration
+The site is built with **React**, **TypeScript**, and **Vite**, and is deployed to GitHub Pages via the `gh-pages` branch.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## License
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+This project is licensed under [MIT License](./LICENSE.txt)
