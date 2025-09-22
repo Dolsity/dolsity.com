@@ -1,5 +1,6 @@
+import { useState, useCallback, useMemo } from 'react'
 import { Box, Typography, Card, Chip, Link, IconButton, Tooltip } from '@mui/material'
-import { Code, Web } from '@mui/icons-material'
+import { Code, Web, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 
 type StaticImageLike = { src: string }
 
@@ -10,45 +11,102 @@ type ProjectCardProps = {
 }
 
 export default function ProjectCard({ card, onOpenImage, onOpenDetails }: ProjectCardProps) {
+  // Normalize images once per card
+  const images: string[] = useMemo(() => {
+    if (!card.image) return []
+    if (Array.isArray(card.image))
+      return card.image.map((i) => (typeof i === 'string' ? i : (i as StaticImageLike).src))
+    return [typeof card.image === 'string' ? card.image : (card.image as StaticImageLike).src]
+  }, [card.image])
+
+  const [index, setIndex] = useState(0)
+
+  const prev = useCallback(
+    () => setIndex((i) => (i - 1 + images.length) % images.length),
+    [images.length]
+  )
+  const next = useCallback(() => setIndex((i) => (i + 1) % images.length), [images.length])
+
   return (
     <Card
       sx={{
         userSelect: 'none',
         textAlign: 'center',
         m: 1.5,
-        borderRadius: '3px',
+        borderRadius: 1,
         border: 1,
         borderColor: 'primary.main',
         bgcolor: 'background.paper',
       }}
     >
       {/* CARD IMAGE */}
-      <Box sx={{ height: '8rem' }}>
-        {card.image ? (
-          <Box
-            component="img"
-            src={typeof card.image === 'string' ? card.image : (card.image as StaticImageLike).src}
-            alt={card.title}
-            loading="lazy"
-            sx={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              transition: 'transform 0.4s ease',
-              '&:hover': { transform: 'scale(1.04)' },
-              cursor: onOpenImage ? 'pointer' : 'default',
-            }}
-            onClick={() =>
-              onOpenImage &&
-              onOpenImage(
-                typeof card.image === 'string' ? card.image : (card.image as StaticImageLike).src,
-                card.title
-              )
-            }
-            onError={(e) => {
-              ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-            }}
-          />
+      <Box sx={{ height: '8rem', position: 'relative', overflow: 'hidden' }}>
+        {images.length ? (
+          <>
+            <Box
+              component="img"
+              src={images[index]}
+              alt={`${card.title} (${index + 1}/${images.length})`}
+              loading="lazy"
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                transition: 'opacity 0.4s ease',
+                opacity: 1,
+                cursor: onOpenImage ? 'pointer' : 'default',
+              }}
+              onClick={() => onOpenImage && onOpenImage(images[index], card.title)}
+              onError={(e) => {
+                // Prevent error loop and hide failed image gracefully
+                const img = e.currentTarget as HTMLImageElement
+                img.onerror = null
+                img.style.display = 'none'
+              }}
+            />
+
+            {/* PROJECT CARD IMAGE PREVIEW BUTTONS */}
+            {images.length > 1 && (
+              <>
+                <IconButton
+                  aria-label="previous image"
+                  size="small"
+                  onClick={prev}
+                  sx={{
+                    position: 'absolute',
+                    left: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    bgcolor: '#00000090',
+                    border: 0.3,
+                    borderColor: 'primary.contrastText',
+                    color: 'primary.contrastText',
+                    '&:hover': { bgcolor: '#000000b0' },
+                  }}
+                >
+                  <ArrowBackIosNew fontSize="small" />
+                </IconButton>
+                <IconButton
+                  aria-label="next image"
+                  size="small"
+                  onClick={next}
+                  sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    bgcolor: '#00000090',
+                    border: 0.3,
+                    borderColor: 'primary.contrastText',
+                    color: 'primary.contrastText',
+                    '&:hover': { bgcolor: '#000000b0' },
+                  }}
+                >
+                  <ArrowForwardIos fontSize="small" />
+                </IconButton>
+              </>
+            )}
+          </>
         ) : (
           <Box sx={{ width: '100%', height: '100%', background: 'background.paper' }} />
         )}
@@ -66,10 +124,11 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
         {card.githubUrl && (
           <Tooltip title="Source Code" placement="bottom">
             <IconButton
-              aria-label="code"
+              component="a"
               href={card.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="view source"
               sx={{ color: 'text.primary' }}
             >
               <Code />
@@ -79,10 +138,11 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
         {card.demoUrl && (
           <Tooltip title="Preview" placement="bottom">
             <IconButton
-              aria-label="code"
+              component="a"
               href={card.demoUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="open demo"
               sx={{ color: 'text.primary' }}
             >
               <Web />
