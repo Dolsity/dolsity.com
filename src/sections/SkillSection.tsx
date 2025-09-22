@@ -26,6 +26,7 @@ export default function SkillsSection() {
         'React',
         'Redux',
         'Material-UI',
+        'Tailwind CSS',
         'Flask',
         'PyMongo',
         'Pillow',
@@ -79,7 +80,7 @@ export default function SkillsSection() {
             gridTemplateColumns: 'repeat(auto-fit, minmax(14em, 1fr))',
             justifyContent: 'space-between',
             alignItems: 'stretch',
-            gap: '0.5rem',
+            gap: 0,
             my: 1,
             textAlign: { xs: 'center', sm: 'left' },
           }}

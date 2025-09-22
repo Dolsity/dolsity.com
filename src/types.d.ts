@@ -26,7 +26,7 @@ interface iSkillCard {
 interface iProjectCard {
   title: string
   summary: string
-  image?: string | StaticImageData
+  image?: string | StaticImageData | Array<string | StaticImageData>
   githubUrl?: string
   demoUrl?: string
   technologies: string[]

@@ -27,7 +27,7 @@ export function CodeEditor({ fullLines, typedLines, cursor, extraBlankLines = 2 
         gridTemplateColumns: '2rem auto',
         fontFamily: 'Fira Code, monospace',
         fontWeight: 400,
-        fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.85rem' },
+        fontSize: { xs: '0.65rem', sm: '0.75rem', md: '0.85rem' },
         userSelect: 'none',
       }}
     >
