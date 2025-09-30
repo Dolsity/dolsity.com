@@ -1,5 +1,16 @@
-import { useState, useCallback, useMemo } from 'react'
-import { Box, Typography, Card, Chip, Link, IconButton, Tooltip } from '@mui/material'
+import { useState, useCallback, useMemo, useEffect } from 'react'
+import {
+  Box,
+  Typography,
+  Card,
+  Chip,
+  Link,
+  IconButton,
+  Tooltip,
+  CardActionArea,
+  CardMedia,
+  CircularProgress,
+} from '@mui/material'
 import { Code, Web, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 
 type StaticImageLike = { src: string }
@@ -11,7 +22,7 @@ type ProjectCardProps = {
 }
 
 export default function ProjectCard({ card, onOpenImage, onOpenDetails }: ProjectCardProps) {
-  // Normalize images once per card
+  // NORMALIZE IMAGES ONCE PER CARD
   const images: string[] = useMemo(() => {
     if (!card.image) return []
     if (Array.isArray(card.image))
@@ -20,12 +31,23 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
   }, [card.image])
 
   const [index, setIndex] = useState(0)
+  const [imageLoading, setImageLoading] = useState(true)
 
-  const prev = useCallback(
-    () => setIndex((i) => (i - 1 + images.length) % images.length),
-    [images.length]
-  )
-  const next = useCallback(() => setIndex((i) => (i + 1) % images.length), [images.length])
+  // CURRENT IMAGE SOURCE FOR DEPENDENCY TRACKING
+  const currentImageSrc = images[index]
+
+  // RESET LOADING STATE WHEN IMAGE SOURCE CHANGES
+  useEffect(() => {
+    setImageLoading(true)
+  }, [currentImageSrc])
+
+  const prev = useCallback(() => {
+    setIndex((i) => (i - 1 + images.length) % images.length)
+  }, [images.length])
+
+  const next = useCallback(() => {
+    setIndex((i) => (i + 1) % images.length)
+  }, [images.length])
 
   return (
     <Card
@@ -37,34 +59,58 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
         border: 1,
         borderColor: 'primary.main',
         bgcolor: 'background.paper',
+        boxShadow: 'none',
       }}
     >
       {/* CARD IMAGE */}
-      <Box sx={{ height: '8rem', position: 'relative', overflow: 'hidden' }}>
+      <CardActionArea>
         {images.length ? (
           <>
-            <Box
-              component="img"
-              src={images[index]}
-              alt={`${card.title} (${index + 1}/${images.length})`}
-              loading="lazy"
-              sx={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'opacity 0.4s ease',
-                opacity: 1,
-                cursor: onOpenImage ? 'pointer' : 'default',
-              }}
-              onClick={() => onOpenImage && onOpenImage(images[index], card.title)}
-              onError={(e) => {
-                // Prevent error loop and hide failed image gracefully
-                const img = e.currentTarget as HTMLImageElement
-                img.onerror = null
-                img.style.display = 'none'
-              }}
-            />
-
+            <Box sx={{ position: 'relative', height: '8rem', overflow: 'hidden' }}>
+              {/* IMAGE LOADING STATE */}
+              {imageLoading && (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    bgcolor: 'background.paper',
+                    zIndex: 1,
+                  }}
+                >
+                  <CircularProgress size={30} />
+                </Box>
+              )}
+              <CardMedia
+                key={`${card.title}-${index}`}
+                component="img"
+                image={images[index]}
+                alt={`${card.title} (${index + 1}/${images.length})`}
+                loading="lazy"
+                sx={{
+                  height: '8rem',
+                  position: 'relative',
+                  objectFit: 'cover',
+                  cursor: onOpenImage ? 'zoom-in' : 'default',
+                  opacity: imageLoading ? 0 : 1,
+                  transition: 'opacity 0.3s ease',
+                }}
+                onLoad={() => setImageLoading(false)}
+                onError={(e) => {
+                  setImageLoading(false)
+                  // PREVENT ERROR LOOP AND HIDE FAILED IMAGE GRACEFULLY
+                  const img = e.currentTarget as HTMLImageElement
+                  img.onerror = null
+                  img.style.display = 'none'
+                }}
+                onClick={() => onOpenImage && onOpenImage(images[index], card.title)}
+              />
+            </Box>
             {/* PROJECT CARD IMAGE PREVIEW BUTTONS */}
             {images.length > 1 && (
               <>
@@ -77,11 +123,11 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
                     left: 8,
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    bgcolor: '#00000090',
+                    bgcolor: '#000000cc',
                     border: 0.3,
                     borderColor: 'primary.contrastText',
                     color: 'primary.contrastText',
-                    '&:hover': { bgcolor: '#000000b0' },
+                    '&:hover': { bgcolor: '#000000aa' },
                   }}
                 >
                   <ArrowBackIosNew fontSize="small" />
@@ -95,11 +141,11 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
                     right: 8,
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    bgcolor: '#00000090',
+                    bgcolor: '#000000cc',
                     border: 0.3,
                     borderColor: 'primary.contrastText',
                     color: 'primary.contrastText',
-                    '&:hover': { bgcolor: '#000000b0' },
+                    '&:hover': { bgcolor: '#000000aa' },
                   }}
                 >
                   <ArrowForwardIos fontSize="small" />
@@ -110,7 +156,7 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
         ) : (
           <Box sx={{ width: '100%', height: '100%', background: 'background.paper' }} />
         )}
-      </Box>
+      </CardActionArea>
 
       {/* CARD TITLE */}
       <Box sx={{ bgcolor: 'secondary.main', p: 1 }}>
@@ -119,8 +165,16 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
         </Typography>
       </Box>
 
-      {/* CARD ICONS, TAGS, SUMMARY, READ MORE */}
-      <Box sx={{ p: 1 }}>
+      {/* CARD CONTENT */}
+      <Box
+        sx={{
+          p: 1,
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          height: { xs: 'auto', sm: 180 },
+          overflow: 'scroll',
+        }}
+      >
         {card.githubUrl && (
           <Tooltip title="Source Code" placement="bottom">
             <IconButton
@@ -149,7 +203,6 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
             </IconButton>
           </Tooltip>
         )}
-
         <Box sx={{ m: 1 }}>
           {card.technologies.map((tech: string, techIndex: number) => (
             <Chip
@@ -173,7 +226,6 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
             />
           ))}
         </Box>
-
         <Typography variant="body2" sx={{ m: 0.5, display: 'block' }}>
           {card.summary}
         </Typography>

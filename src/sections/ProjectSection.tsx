@@ -10,6 +10,8 @@ import {
   DialogTitle,
   IconButton,
   Tooltip,
+  CircularProgress,
+  Backdrop,
 } from '@mui/material'
 import { Close, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 import ProjectCard from '../components/Cards/ProjectCard'
@@ -61,7 +63,7 @@ const PROJECTS: iProjectCard[] = [
 
 type ImgLike = string | { src: string }
 
-function normalizeImages(image?: ImgLike | ImgLike[]): string[] {
+const normalizeImages = (image?: ImgLike | ImgLike[]): string[] => {
   if (!image) return []
   if (Array.isArray(image)) return image.map((i) => (typeof i === 'string' ? i : i.src))
   return [typeof image === 'string' ? image : image.src]
@@ -69,18 +71,29 @@ function normalizeImages(image?: ImgLike | ImgLike[]): string[] {
 
 export default function ProjectsSection() {
   const [preview, setPreview] = useState<PreviewState | null>(null)
-  const [detail, setDetail] = useState<{ title: string; description: string } | null>(null)
+  const [detail, setDetail] = useState<{
+    title: string
+    description: string
+  } | null>(null)
+  const [imageLoading, setImageLoading] = useState(false)
 
   const openImage = useCallback(
     (src: string, title: string, projectImage?: iProjectCard['image']) => {
       const images = normalizeImages(projectImage)
       const idx = images.indexOf(src)
-      setPreview({ src, title, images, index: idx >= 0 ? idx : 0 })
+      setImageLoading(true)
+      setPreview({
+        src,
+        title,
+        images,
+        index: idx >= 0 ? idx : 0,
+      })
     },
     []
   )
 
   const handlePrev = useCallback(() => {
+    setImageLoading(true)
     setPreview((p) => {
       if (!p) return p
       const nextIdx = (p.index - 1 + p.images.length) % p.images.length
@@ -89,6 +102,7 @@ export default function ProjectsSection() {
   }, [])
 
   const handleNext = useCallback(() => {
+    setImageLoading(true)
     setPreview((p) => {
       if (!p) return p
       const nextIdx = (p.index + 1) % p.images.length
@@ -96,7 +110,10 @@ export default function ProjectsSection() {
     })
   }, [])
 
-  const handleClosePreview = useCallback(() => setPreview(null), [])
+  const handleClosePreview = useCallback(() => {
+    setPreview(null)
+    setImageLoading(false)
+  }, [])
 
   return (
     <Box id="projects" sx={{ bgcolor: 'background.default', py: 6 }}>
@@ -157,145 +174,163 @@ export default function ProjectsSection() {
           <Dialog
             open={Boolean(preview)}
             onClose={handleClosePreview}
-            maxWidth="lg"
+            maxWidth="md"
+            BackdropProps={{
+              sx: {
+                bgcolor: '#0000008f',
+                backdropFilter: 'blur(4px)',
+              },
+            }}
             PaperProps={{
               sx: {
-                backgroundColor: 'transparent',
+                bgcolor: 'transparent',
                 boxShadow: 'none',
                 border: 0.5,
                 borderColor: 'common.white',
+                width: '100%',
+                maxHeight: 'fit-content',
+                overflow: 'hidden',
               },
             }}
           >
-            <DialogContent sx={{ p: 0 }}>
+            <DialogContent sx={{ userSelect: 'none', p: 0, position: 'relative' }}>
+              {/* LOADING OVERLAY */}
+              {imageLoading && (
+                <Backdrop open sx={{ position: 'absolute', zIndex: 10 }}>
+                  <Box sx={{ textAlign: 'center' }}>
+                    <CircularProgress size={60} sx={{ color: 'common.white', mb: 2 }} />
+                    <Typography variant="body2" color="text.primary">
+                      Loading image...
+                    </Typography>
+                  </Box>
+                </Backdrop>
+              )}
+
+              {/* IMAGE CONTAINER */}
               <Box
                 sx={{
                   position: 'relative',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  maxWidth: '100%',
+                  height: '100%',
+                  overflow: 'hidden',
                 }}
               >
                 <Box
+                  key={`${preview?.src}-${preview?.index}`}
                   component="img"
                   src={preview?.images?.[preview.index ?? 0] ?? preview?.src}
                   alt={preview?.title || ''}
                   sx={{
-                    display: { xs: 'none', sm: 'block' },
-                    maxWidth: '85vw',
-                    maxHeight: '80vh',
+                    display: 'block',
+                    maxWidth: '100%',
+                    maxHeight: '100%',
+                    width: 'auto',
+                    height: 'auto',
                     objectFit: 'contain',
                     cursor: 'zoom-out',
+                    opacity: imageLoading ? 0 : 1,
+                    transition: 'all 0.3s ease',
+                    borderRadius: 1,
                   }}
                   onClick={handleClosePreview}
+                  onLoad={() => setImageLoading(false)}
+                  onError={() => setImageLoading(false)}
                 />
 
-                {/* MOBILE: HORIZONTAL SCROLLABLE STRIP */}
+                {/* CONTROL BUTTONS */}
                 <Box
                   sx={{
-                    display: { xs: 'flex', sm: 'none' },
-                    overflowX: 'auto',
-                    WebkitOverflowScrolling: 'touch',
-                    gap: 1,
-                    px: 1,
+                    position: 'absolute',
+                    display: 'flex',
+                    top: { xs: 5, sm: 10, md: 15 },
+                    right: { xs: 5, sm: 10, md: 15 },
+                    gap: { xs: 0.3, sm: 0.5 },
+                    bgcolor: '#00000090',
+                    border: 0.5,
+                    borderColor: 'divider',
+                    borderRadius: 1,
+                    p: { xs: 0, sm: 0.5 },
                   }}
                 >
-                  {(preview?.images ?? [preview?.src]).map((src, i) => (
-                    <Box
-                      key={i}
-                      component="img"
-                      src={src}
-                      alt={preview?.title || ''}
-                      loading="lazy"
-                      sx={{
-                        flex: '0 0 85vw',
-                        maxWidth: '85vw',
-                        maxHeight: '80vh',
-                        display: 'block',
-                        objectFit: 'contain',
-                        cursor: 'zoom-out',
-                      }}
+                  <Tooltip title="Close">
+                    <IconButton
                       onClick={handleClosePreview}
-                    />
-                  ))}
+                      size="small"
+                      sx={{ color: 'common.white' }}
+                    >
+                      <Close />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
 
-                {/* DESKTOP: PREV / NEXT BUTTONS INSIDE DIALOG */}
+                {/* IMAGE COUNTER AND INFO */}
+                {preview?.images && preview.images.length > 1 && (
+                  <Box
+                    sx={{
+                      position: 'absolute',
+                      bottom: { xs: 5, sm: 10, md: 15 },
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      bgcolor: '#00000090',
+                      border: 0.5,
+                      borderColor: 'divider',
+                      borderRadius: 1,
+                      px: { xs: 1, sm: 1.5, md: 2 },
+                      py: { xs: 0.5, sm: 0.75, md: 1 },
+                    }}
+                  >
+                    <Typography variant="body2" color="text.primary">
+                      {preview.index + 1} / {preview.images.length}
+                    </Typography>
+                  </Box>
+                )}
+
+                {/* NAVIGATION BUTTONS */}
                 {preview?.images && preview.images.length > 1 && (
                   <>
-                    <Tooltip title="Previous Image" placement="bottom-start">
+                    <Tooltip title="Previous">
                       <IconButton
-                        aria-label="previous image"
-                        size="medium"
                         onClick={handlePrev}
                         sx={{
                           position: 'absolute',
-                          left: 6,
+                          left: { xs: 5, sm: 10, md: 15 },
                           top: '50%',
                           transform: 'translateY(-50%)',
-                          bgcolor: '#000000bb',
+                          bgcolor: '#00000090',
                           border: 0.5,
-                          borderColor: 'primary.contrastText',
-                          color: 'primary.contrastText',
-                          '&:hover': { bgcolor: '#000000aa' },
-                          width: 38,
-                          height: 64,
-                          borderRadius: 0,
-                          display: { xs: 'none', sm: 'flex' },
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          borderColor: 'divider',
+                          color: 'text.primary',
+                          '&:hover': { bgcolor: '#000000bb' },
+                          width: { xs: 32, sm: 36, md: 40 },
+                          height: { xs: 60, sm: 64, md: 70 },
+                          borderRadius: 1,
                         }}
                       >
-                        <ArrowBackIosNew fontSize="small" />
+                        <ArrowBackIosNew />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Next Image" placement="bottom-end">
+                    <Tooltip title="Next">
                       <IconButton
-                        aria-label="next image"
-                        size="medium"
                         onClick={handleNext}
                         sx={{
                           position: 'absolute',
-                          right: 6,
+                          right: { xs: 5, sm: 10, md: 15 },
                           top: '50%',
                           transform: 'translateY(-50%)',
-                          bgcolor: '#000000bb',
+                          bgcolor: '#00000090',
                           border: 0.5,
-                          borderColor: 'primary.contrastText',
-                          color: 'primary.contrastText',
-                          '&:hover': { bgcolor: '#000000aa' },
-                          width: 38,
-                          height: 64,
-                          borderRadius: 0,
-                          display: { xs: 'none', sm: 'flex' },
-                          alignItems: 'center',
-                          justifyContent: 'center',
+                          borderColor: 'divider',
+                          color: 'text.primary',
+                          '&:hover': { bgcolor: '#000000bb' },
+                          width: { xs: 32, sm: 36, md: 40 },
+                          height: { xs: 60, sm: 64, md: 70 },
+                          borderRadius: 1,
                         }}
                       >
-                        <ArrowForwardIos fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip title="Close" placement="bottom-end">
-                      <IconButton
-                        aria-label="close"
-                        size="medium"
-                        onClick={handleClosePreview}
-                        sx={{
-                          position: 'absolute',
-                          right: 6,
-                          top: 6,
-                          bgcolor: '#000000bb',
-                          border: 0.5,
-                          borderColor: 'primary.contrastText',
-                          color: 'primary.contrastText',
-                          '&:hover': { bgcolor: '#000000aa' },
-                          borderRadius: 0,
-                          display: { xs: 'none', sm: 'flex' },
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Close fontSize="small" />
+                        <ArrowForwardIos />
                       </IconButton>
                     </Tooltip>
                   </>
