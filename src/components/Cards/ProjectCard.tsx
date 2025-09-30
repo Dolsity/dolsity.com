@@ -169,10 +169,6 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
       <Box
         sx={{
           p: 1,
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          height: { xs: 'auto', sm: 180 },
-          overflow: 'scroll',
         }}
       >
         {card.githubUrl && (
