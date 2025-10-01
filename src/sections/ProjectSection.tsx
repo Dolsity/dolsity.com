@@ -12,6 +12,9 @@ import {
   Tooltip,
   CircularProgress,
   Backdrop,
+  List,
+  ListItem,
+  ListItemText,
 } from '@mui/material'
 import { Close, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
 import ProjectCard from '../components/Cards/ProjectCard'
@@ -30,16 +33,32 @@ const PROJECTS: iProjectCard[] = [
     summary: 'Discover one of the most unusual economies found in a Discord Bot.',
     description:
       'Fora is a verified Discord bot serving over 100,000 users across 500+ servers, offering a one-of-a-kind economy system where users can earn, trade, and gamble their way to the top using a variety of interactive commands and features.',
+    features: [
+      'Multi-server economy system with earning and trading',
+      'Custom user profiles with achievements and exclusive badges',
+      'Real-time global leaderboards and statistics',
+      'User-friendly website for bot management and stats',
+      'Hundreds of interactive commands and mini-games',
+      'Robust admin and moderation tools',
+    ],
     technologies: ['Python', 'Flask', 'Pillow', 'MongoDB', 'Discord API'],
     demoUrl: '',
     githubUrl: 'https://github.com/forabot',
     image: '/img/forabot.png',
   },
   {
-    title: 'Spotify API',
+    title: 'Spotify API Dashboard',
     summary:
       'A self-hosted Spotify dashboard to display your top played artists, tracks, and more.',
-    description: '',
+    description:
+      'A self-hosted Spotify dashboard that provides insights into your Spotify listening habits from the last 4 weeks, 6 months, and of all time.',
+    features: [
+      'View your top 100 artists and tracks',
+      'Recent listening history',
+      'Artist, album, and track pages with extensive details',
+      'Self-hosted and privacy-focused',
+      'Responsive design for all devices',
+    ],
     technologies: ['React', 'TypeScript', 'Vite', 'Material-UI', 'Spotify API'],
     demoUrl: '',
     githubUrl: 'https://github.com/dolsity/spotify-api',
@@ -54,6 +73,9 @@ const PROJECTS: iProjectCard[] = [
   {
     title: 'Link in Bio',
     summary: 'A simple link in bio website only using HTML5/CSS3.',
+    description:
+      'A clean, responsive link-in-bio solution that showcases social media profiles and important links in one place.',
+    features: ['Easy to customize', 'Lightweight and fast', 'Responsive design for all devices'],
     technologies: ['HTML5', 'CSS3'],
     demoUrl: 'https://dolsity.github.io/link-in-bio',
     githubUrl: 'https://github.com/dolsity/link-in-bio',
@@ -74,6 +96,7 @@ export default function ProjectsSection() {
   const [detail, setDetail] = useState<{
     title: string
     description: string
+    features: string[]
   } | null>(null)
   const [imageLoading, setImageLoading] = useState(false)
 
@@ -165,7 +188,9 @@ export default function ProjectsSection() {
                 key={index}
                 card={project}
                 onOpenImage={(src) => openImage(src, project.title, project.image)}
-                onOpenDetails={(title, description) => setDetail({ title, description })}
+                onOpenDetails={(title, description) =>
+                  setDetail({ title, description, features: project.features || [] })
+                }
               />
             ))}
           </Grid>
@@ -357,10 +382,30 @@ export default function ProjectsSection() {
                 <Close />
               </IconButton>
             </DialogTitle>
-            <DialogContent sx={{ bgcolor: 'background.paper', p: 0 }}>
-              <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', px: 3, py: 2 }}>
+
+            <DialogContent
+              sx={{
+                bgcolor: 'background.paper',
+                py: 2,
+                px: 3,
+                lineHeight: 1.7,
+                maxHeight: '70vh',
+                overflowY: 'auto',
+              }}
+            >
+              <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', py: 2 }}>
                 {detail?.description}
               </Typography>
+              <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
+                Key Features:
+              </Typography>
+              <List sx={{ listStyleType: 'disc', pl: 3, py: 0 }}>
+                {detail?.features.map((feature, index) => (
+                  <ListItem key={index} sx={{ p: 0, display: 'list-item' }}>
+                    <ListItemText primary={feature} />
+                  </ListItem>
+                ))}
+              </List>
             </DialogContent>
           </Dialog>
         </Box>

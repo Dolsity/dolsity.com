@@ -18,7 +18,7 @@ type StaticImageLike = { src: string }
 type ProjectCardProps = {
   card: iProjectCard
   onOpenImage?: (src: string, title: string) => void
-  onOpenDetails?: (title: string, description: string) => void
+  onOpenDetails?: (title: string, description: string, features: string[]) => void
 }
 
 export default function ProjectCard({ card, onOpenImage, onOpenDetails }: ProjectCardProps) {
@@ -229,7 +229,9 @@ export default function ProjectCard({ card, onOpenImage, onOpenDetails }: Projec
           <Link
             component="button"
             variant="body2"
-            onClick={() => onOpenDetails && onOpenDetails(card.title, card.description!)}
+            onClick={() =>
+              onOpenDetails && onOpenDetails(card.title, card.description!, card.features || [])
+            }
             underline="always"
             sx={{ color: 'text.secondary', display: 'inline-block', mt: 0.5 }}
           >

@@ -31,4 +31,5 @@ interface iProjectCard {
   demoUrl?: string
   technologies: string[]
   description?: string
+  features?: string[]
 }
