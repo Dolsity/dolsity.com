@@ -35,24 +35,24 @@ export default function Footer() {
   ]
   const footerIcons: iFooterIcon[] = [
     {
+      id: 'footer-instagram-icon',
+      icon: <Instagram />,
+      url: 'https://www.instagram.com/dolsity/',
+    },
+    {
       id: 'footer-github-icon',
       icon: <GitHub />,
       url: 'https://github.com/dolsity',
     },
     {
-      id: 'footer-linkedin-icon',
-      icon: <LinkedIn />,
-      url: 'https://www.linkedin.com/in/dolsity/',
-    },
-    {
       id: 'footer-email-icon',
       icon: <Email />,
-      url: 'mailto:dolsity@example.com',
+      url: 'mailto:dolsitywork@gmail.com',
     },
     {
-      id: 'footer-instagram-icon',
-      icon: <Instagram />,
-      url: 'https://www.instagram.com/dolsity/',
+      id: 'footer-linkedin-icon',
+      icon: <LinkedIn />,
+      url: '',
     },
   ]
 
