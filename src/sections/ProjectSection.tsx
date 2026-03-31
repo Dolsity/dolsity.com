@@ -16,7 +16,7 @@ import {
   ListItem,
   ListItemText,
 } from '@mui/material'
-import { Close, ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material'
+import { Close, ArrowBackIosNew, ArrowForwardIos, Info } from '@mui/icons-material'
 import ProjectCard from '../components/Cards/ProjectCard'
 
 type PreviewState = {
@@ -372,12 +372,14 @@ export default function ProjectsSection() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                p: 1.5,
+                py: 1.5,
+                px: 2,
               }}
             >
-              <Typography variant="h6" sx={{ mx: 1.5 }}>
-                {detail?.title}
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <Info color="primary" />
+                <Typography variant="h6">{detail?.title}</Typography>
+              </Box>
               <IconButton aria-label="close" onClick={() => setDetail(null)} size="small">
                 <Close />
               </IconButton>
@@ -386,8 +388,7 @@ export default function ProjectsSection() {
             <DialogContent
               sx={{
                 bgcolor: 'background.paper',
-                py: 2,
-                px: 3,
+                p: 2,
                 lineHeight: 1.7,
                 maxHeight: '70vh',
                 overflowY: 'auto',
